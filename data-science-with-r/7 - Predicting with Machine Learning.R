@@ -25,9 +25,15 @@ test <- iris[-indexes, ]
 library(tree)
 
 # Train a decision tree model
+# Original creates 3 predictors in the tree so partition.tree fails.
+# Overridden below to force two predictors
+# model <- tree(
+#     formula = Species ~ .,
+#     data = train)
+
 model <- tree(
-    formula = Species ~ .,
-    data = train)
+  formula = Species ~ Petal.Length + Petal.Width,
+  data = train)
 
 # Inspect the model
 summary(model)
@@ -53,7 +59,7 @@ plot(
   ylab = "Petal Width (cm)")
 
 # Plot the decision tree boundaries
-# Fails as we have 3 predictors
+# Fails if we have 3 predictors
 partition.tree(
   tree = model,
   label = "Species",
@@ -71,7 +77,7 @@ table(
   y = test$Species)
 
 # Load the caret package
-install.packages('caret', dependencies = TRUE)
+# install.packages('caret', dependencies = TRUE)
 library(caret)
 
 # Evaluate the prediction results                                            
